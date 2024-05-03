@@ -9,7 +9,7 @@ phone = '+380 93 209 68 65'
 
 client = TelegramClient("sesassadsasads1", api_id, api_hash)
 
-@client.on(events.NewMessage)
+@client.on(events.NewMessage(chats="@mediap2p_chat"))
 async def handle_new_message(event):
     print(f"Received message: {event.text}")
 
