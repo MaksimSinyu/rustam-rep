@@ -1,4 +1,3 @@
-ИМЕННО КОГДА Я ЗАПУСКАЮ НА ЛИНУКСЕ ЧЕРЕЗ SUDO PYTHON3 MAIN.PY ОНО НЕ РЕАГИРУЕТ НА НОВЫЕ СООБЩЕНИЯ ТОЛЬКО ПОКА Я ИХ НЕ ПРОГРУЖУ, А НА ПК НА ВИНДОВСЕ ВСЁ НОРМАЛЬНО РЕАГИРУЕТ СРАЗУ
 from telethon import TelegramClient, events, sync
 import logging
 
