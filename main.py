@@ -4,7 +4,7 @@ import config
 import logging
 
 # Настройка логгирования
-client = TelegramClient('new_session', config.api_id, config.api_hash)
+client = TelegramClient('new_session2', config.api_id, config.api_hash)
 
 @client.on(events.NewMessage)
 async def handle_new_message(event):
