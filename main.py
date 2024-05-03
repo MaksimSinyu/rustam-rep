@@ -1,10 +1,14 @@
-from telethon import TelegramClient, events
+ИМЕННО КОГДА Я ЗАПУСКАЮ НА ЛИНУКСЕ ЧЕРЕЗ SUDO PYTHON3 MAIN.PY ОНО НЕ РЕАГИРУЕТ НА НОВЫЕ СООБЩЕНИЯ ТОЛЬКО ПОКА Я ИХ НЕ ПРОГРУЖУ, А НА ПК НА ВИНДОВСЕ ВСЁ НОРМАЛЬНО РЕАГИРУЕТ СРАЗУ
+from telethon import TelegramClient, events, sync
+import logging
 
-api_id = 24120751  # Замените на ваш API ID
-api_hash = 'acaa33628ae3a74cf956a6826e7779de'  # Замените на ваш API Hash
-phone = '+380 93 209 68 65'  # Ваш номер телефона
+logging.basicConfig(level=logging.DEBUG)
 
-client = TelegramClient("ses", api_id, api_hash)
+api_id = 24120751
+api_hash = 'acaa33628ae3a74cf956a6826e7779de'
+phone = '+380 93 209 68 65'
+
+client = TelegramClient("sesassadsasads1", api_id, api_hash)
 
 @client.on(events.NewMessage)
 async def handle_new_message(event):
@@ -12,8 +16,9 @@ async def handle_new_message(event):
 
 async def main():
     await client.start()
-    print("Client started. Waiting for messages...")
+    await client.catch_up()  # Подписаться на обновления в реальном времени
+    print("Client started. Listening for new messages...")
     await client.run_until_disconnected()
 
-if __name__ == '__main__':
+with client:
     client.loop.run_until_complete(main())
