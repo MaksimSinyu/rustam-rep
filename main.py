@@ -11,7 +11,7 @@ async def handle_new_message(event):
     logging.info(f"Received message from {event.chat_id}: {event.text}")
 
 async def main():
-    await client.start(phone)  # Теперь требуется ввести номер телефона
+    await client.start()  # Теперь требуется ввести номер телефона
     print("Клиент запущен. Ожидание сообщений...")
     await client.run_until_disconnected()
 
