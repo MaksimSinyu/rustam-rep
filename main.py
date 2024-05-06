@@ -44,8 +44,12 @@ async def handler(event):
             conn.commit()
             logging.info(f'Новый пользователь {user_id} добавлен в базу данных')
             try:
+                # Формируем сообщение со ссылкой на профиль пользователя
+                user_link = f"[Пользователь с ID {user_id}](tg://user?id={user_id})"
+                message_content = f'{user_link} впервые написал в чат "{chat_title}": {message_text}'
+                
                 # Отправляем сообщение с информацией о новом пользователе, названии чата и тексте сообщения
-                await client.send_message(-4095716021, f'Пользователь с ID {user_id} впервые написал в чат "{chat_title}": {message_text}')
+                await client.send_message(-1002133595454, message_content, parse_mode='md')
                 logging.info(f'Сообщение о новом пользователе {user_id} отправлено')
             except Exception as e:
                 logging.error(f'Ошибка при отправке сообщения о новом пользователе {user_id}: {e}')
