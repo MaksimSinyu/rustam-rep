@@ -1,7 +1,7 @@
 from telethon import TelegramClient, events, sync
 import logging
-import sqlite3
 import config
+import sqlite3
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -16,40 +16,49 @@ except Exception as e:
     logging.error(f'Ошибка при инициализации базы данных SQLite: {e}')
 
 try:
-    # Создание клиента Telegram один раз
+    # Создание клиента Telegram
     client = TelegramClient('dsa8yday8das8ydd', config.api_id, config.api_hash)
     logging.info('Клиент Telegram успешно создан')
 except Exception as e:
     logging.error(f'Ошибка при создании клиента Telegram: {e}')
 
+api_id = 24120751
+api_hash = 'acaa33628ae3a74cf956a6826e7779de'
+phone = '+380 93 209 68 65'
+
+client = TelegramClient("dsa8yday8das8ydd", api_id, api_hash)
+
 @client.on(events.NewMessage(chats=config.channel_usernames))
 async def handler(event):
     try:
         logging.info("NEW MESSAGE")
-        # Использование get_sender_id(), если доступно, для устранения проблем с sender_id
-        user_id = await event.get_sender_id()
+        user_id = event.sender_id
+        # Получаем информацию о чате
         chat = await event.get_chat()
-        chat_title = getattr(chat, 'title', 'некий чат')
-        message_text = event.message.text if event.message else 'Сообщение без текста'
+        chat_title = getattr(chat, 'title', 'некий чат')  # Получаем название чата или используем 'некий чат' по умолчанию
+        message_text = event.message.text if event.message else 'Сообщение без текста'  # Получаем текст сообщения или стандартное сообщение
 
         cursor.execute('SELECT user_id FROM messaged_users WHERE user_id = ?', (user_id,))
         if cursor.fetchone() is None:
             cursor.execute('INSERT INTO messaged_users (user_id) VALUES (?)', (user_id,))
             conn.commit()
             logging.info(f'Новый пользователь {user_id} добавлен в базу данных')
-
-            user_link = f"[Пользователь с ID {user_id}](tg://user?id={user_id})"
-            message_content = f'{user_link} впервые написал в чат "{chat_title}": {message_text}'
-            
-            # Используйте chat_id из конфигурации или предопределенный
-            await client.send_message(config.log_chat_id, message_content, parse_mode='md')
-            logging.info(f'Сообщение о новом пользователе {user_id} отправлено')
+            try:
+                # Формируем сообщение со ссылкой на профиль пользователя
+                user_link = f"[Пользователь с ID {user_id}](tg://user?id={user_id})"
+                message_content = f'{user_link} впервые написал в чат "{chat_title}": {message_text}'
+                
+                # Отправляем сообщение с информацией о новом пользователе, названии чата и тексте сообщения
+                await client.send_message(-1002133595454, message_content, parse_mode='md')
+                logging.info(f'Сообщение о новом пользователе {user_id} отправлено')
+            except Exception as e:
+                logging.error(f'Ошибка при отправке сообщения о новом пользователе {user_id}: {e}')
     except Exception as e:
         logging.error(f'Ошибка при обработке нового сообщения: {e}')
 
 async def main():
     await client.start()
-    await client.catch_up()
+    await client.catch_up()  # Подписаться на обновления в реальном времени
     logging.info("Client started. Listening for new messages...")
     await client.run_until_disconnected()
 
