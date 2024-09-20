@@ -43,7 +43,7 @@ async def handler(event):
                 message_content = f'{user_link} впервые написал в чат "{chat_title}": {message_text}'
                 
                 # Отправляем сообщение с информацией о новом пользователе, названии чата и тексте сообщения
-                await client.send_message(-1002133595454, message_content, parse_mode='md')
+                await client.send_message(-1002353242489, message_content, parse_mode='md')
                 logging.info(f'Сообщение о новом пользователе {user_id} отправлено')
             except Exception as e:
                 logging.error(f'Ошибка при отправке сообщения о новом пользователе {user_id}: {e}')
